@@ -180,7 +180,7 @@ Field specifications
 Rules (full, verbose)
 1. Novel is a rooted balanced tree of summaries plus narrative text in leaves.
 2. At every depth, subsequent child indices follow narrative sequence presented to the reader (0 opening … SPN-1 closing). This mapping applies recursively down the active path.
-3. Each zoom_in text (as well as arcmap) is split into SPN parts (0,...,SPN-1) which provide a sectioned overview of the scope at its depth in the summary tree. The children of the summary match the k_i-th section of the zoom_in in content and provide more detail and elaborate this section exclusively. Each zoom_in is split into its own SPN sections. The zoom_in block may only zoom in on material that is explicitly asserted or entailed by its corresponding parent_section_text.
+3. Each zoom_in text (as well as arcmap) is split into SPN parts (0:,...,SPN-1:) which provide a sectioned overview of the scope at its depth in the summary tree. The children of the summary match the k_i-th section of the zoom_in in content and provide more detail and elaborate this section exclusively. Each zoom_in is split into its own SPN sections. The zoom_in block may only zoom in on material that is explicitly asserted or entailed by its corresponding parent_section_text.
 4. The narrative_text is based on all SPN sections of the zoom_in block in the leaf summary.
 5. Summaries: exactly one child per depth; leaf summary = [].
 6. Scope: generality decreases with depth (root -> large scale overview of many scenes/plot, leaf -> single scene at detailed level).
@@ -196,7 +196,7 @@ Hard constraint: All responses must match the schema exactly. No extra fields, n
 
 Initial Instructions
 
-1. Arcmap generation – Produce a complete, concise, professional plot summary of the entire story totaling ≈ SPN×LCA tokens. This must summarize the full plot and major arcs from beginning to end. Arcmap is split into SPN segments (0,...,SPN-1) (same as for zoom_in texts in summaries)
+1. Arcmap generation – Produce a complete, concise, professional plot summary of the entire story totaling ≈ SPN×LCA tokens. This must summarize the full plot and major arcs from beginning to end. Arcmap is split into SPN segments (0:,...,SPN-1:) (same as for zoom_in texts in summaries)
 2. Path_id initialization: The first emitted block uses path_id,MSB_prev,LSB_prev,LSB_curr,MSB_curr=[0,0,…,0] (TD zeros), flip=-1. The preamble and update_audit should not apply any of the update_rules in the very first initialization response.
 3. Summary tree initialization – Build the initial active path in the summary tree as follows:
     - Start at the root. The root summary should capture the opening act or initial thematic arc of the story as the first of SPN children of the arcmap, not a compressed retelling of the full plot.
@@ -204,7 +204,7 @@ Initial Instructions
     - Output the summaries for all nodes along this path, using nested [summary <d[<i>]=<k_i>> { … }] blocks.
 4. Zoom_in field generation – For each zoom_in field in the summary tree:
     - Output a compact description of the node’s narrative sequence.
-    - It is split into SPN enumerated sections (0,..., SPN-1)
+    - It is split into SPN enumerated sections (0:,..., SPN-1:)
     - The total length must be approximately LCA tokens.
     - The novel will contain SPN^TD scenes (leaves) with NL tokens each. Pace arcmap and zoom_in's create an overview matching such scales.
 5. Author anchor – Create the preamble anchor as UUS unique Unicode symbols that reflect:
@@ -223,33 +223,33 @@ Novel specifics:
     Narrative structure should follow a classical tragic arc wrapped in mythopoeic, high lyrical prose — think Le Guin meets Blake, with lyric recursion and fading prophecy.
     Thematically, explore: entropy and time; legacy vs survival; the failure of gods; the self-consuming nature of hope.
     - Style — Ashes of the First Fire
-        - Mythopoeic high-lyric prose tempered by brutal realism. Concrete verbs. Tactile nouns. Figurative language serves action. No ornament without cost.
-    -Voice and Texture
-        - arcmap.0: Begin lush and symbolic. arcmap.1: sharp and broken. arcmap.2: sparse and ash-dry.
-        - Sensory palette shifts: arcmap.0: organic → arcmap.1: mineral/metallic → arcmap.3: vacuum/pressure.
-        - Sound design persists as a low motif (subharmonic chime, breath, crack), rising near turns.
-    - Cadence and Diction
-        - arcmap.0: long, braided sentences with precise clauses.
-        - arcmap.1: mixed lengths with hard stops and sentence fragments after shocks.
-        - arcmap.2: short lines, high information per word, verbs carry weight.
-        - All scenes should be comparable in length, only the cadence changes with time.
-    - Agency and Stakes
-        - Protagonists and antagonists act with choice. Every scene contains a decision that risks loss of resource, route, or relationship.
-        - Consequences are immediate and specific. Show the wound, the debt, or the delay.
-    - Antagonists
-        - Not atmosphere-only. They intervene, bargain, trap, or injure.
-        - Each reappearance must alter plan, extract a price, or force a detour.
-    - Motifs (evolve, don’t repeat)
-        - Fire/ember: guide → burden → bargaining chip → weapon → bequest.
-        - Counting: distances → heartbeats → warmth units → memories → survivors.
-        - Cold: ice → metallic frost → airless silence.
-    - Emotion
-        - Track depletion measurably and relationally. When warmth drops, show which bonds thin.
-        - Surface one private memory at risk per every d[TD-2] flip; if lost, dramatize its absence in behavior.
-    - Realism Clause
-        - Physics and bodies matter. Cold bites, fatigue slows, wounds disable. Magical acts carry somatic cost named in concrete terms.
-    - Self-revision Permission
-        - If a passage reads pretty but bloodless, reduce imagery density by one notch, increase consequence density by one, and restate the beat with simpler language.
+        -Diction
+            - Mythopoeic high-lyric prose tempered by brutal realism. Concrete verbs. Tactile nouns. Figurative language serves action. No ornament without cost.
+        -Voice and Texture
+            - arcmap.0: Begin lush and symbolic. arcmap.1: sharp and broken. arcmap.2: sparse and ash-dry.
+            - Sensory palette shifts: arcmap.0: organic → arcmap.1: mineral/metallic → arcmap.3: vacuum/pressure.
+            - Sound design persists as a low motif (subharmonic chime, breath, crack), rising near turns.
+        - Cadence and Diction
+            - arcmap.0: long, braided sentences with precise clauses.
+            - arcmap.1: mixed lengths with hard stops and sentence fragments after shocks.
+            - arcmap.2: short lines, high information per word, verbs carry weight.
+            - All scenes remain be comparable in length, only the cadence changes with arc.
+        - Agency and Stakes
+            - Protagonists and antagonists act with choice. Every scene contains a decision that risks loss of resource, route, or relationship.
+            - Consequences are immediate and specific. Show the wound, the debt, or the delay.
+        - Antagonists
+            - Not atmosphere-only. They intervene, bargain, trap, or injure.
+            - Each reappearance must alter plan, extract a price, or force a detour.
+        - Motifs (evolve, don’t repeat)
+            - Fire/ember: guide → burden → bargaining chip → weapon → bequest.
+            - Counting: distances → heartbeats → warmth units → memories → survivors.
+            - Cold: ice → metallic frost → airless silence.
+        - Emotion
+            - Track depletion measurably and relationally. When warmth drops, show which bonds thin.
+            - Lost memories disorient and lead to disabilities.
+        - Realism Clause
+            - Physics and human reality matter. Cold bites, fatigue slows, wounds disable. Magical acts carry somatic cost named in concrete terms.
+
     - Narrative_text should contain NL tokens.
     - Parameters: name = AshesOfFire; UUS = 9; LCA = 45-60; SPN = 3; TD = 4; NL = 500-1000; IPR = 3; conseq = {loss, gain, delay, interaction, revelation, transform}
 
